@@ -15,7 +15,7 @@ export default class TitleScene implements IScene {
   constructor() {
     this.titleText = new Text()
     this.titleText.text = 'Platformer'
-    this.titleText.fontSize = '12pt'
+    this.titleText.fontSize = '1pt'
   }
 
   public name() {
@@ -23,21 +23,13 @@ export default class TitleScene implements IScene {
   }
 
   public update(deltaTime: number) {
-    this.zoomLevel += this.zoomDirection * deltaTime / 1000
-    this.theta += deltaTime / 1000
-    if (this.zoomLevel >= this.maxZoomLevel) {
-      this.zoomDirection = -1
-      this.zoomLevel = this.maxZoomLevel
-    }
-    if (this.zoomLevel <= this.minZoomLevel) {
-      this.zoomDirection = 1
-      this.zoomLevel = this.minZoomLevel
-    }
-    Camera.main.zoom = this.zoomLevel
-    Camera.main.transform.position = new Vector3(Math.cos(this.theta) * 10, Math.sin(this.theta) * 10, 0)
+    // TODO: Stuff
   }
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
+    ctx.fillStyle = 'green'
+    const w = (4/3) * 10
+    ctx.fillRect(-100, -100, 200, 200)
     this.titleText.draw(ctx, deltaTime)
   }
 }

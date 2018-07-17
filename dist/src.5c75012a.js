@@ -776,7 +776,11 @@ var transform_1 = __importDefault(require("./transform"));
 var Camera = /** @class */function () {
     function Camera() {
         this.transform = new transform_1["default"]();
-        this.zoom = 1;
+        this.orthographicSize = 10;
+        this.aspectRatio = {
+            height: 3,
+            width: 4
+        };
     }
     Object.defineProperty(Camera, "main", {
         get: function get() {
@@ -791,20 +795,57 @@ var Camera = /** @class */function () {
     Camera.prototype.begin = function (ctx) {
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.applyScreenTranslation(ctx);
+        this.applyScreenScale(ctx);
         this.applyScale(ctx);
         this.applyTranslation(ctx);
     };
     Camera.prototype.end = function (ctx) {
         ctx.setTransform(1, 0, 0, 1, 0, 0);
+        this.drawLetterbox(ctx);
     };
     Camera.prototype.applyScale = function (ctx) {
-        ctx.scale(this.zoom, this.zoom);
+        var zoomLevel = this._height / (2 * this.orthographicSize);
+        ctx.scale(zoomLevel, zoomLevel);
     };
     Camera.prototype.applyScreenTranslation = function (ctx) {
         ctx.translate(screen_1["default"].width / 2, screen_1["default"].height / 2);
     };
+    Camera.prototype.applyScreenScale = function (ctx) {
+        var actualWidth = screen_1["default"].width;
+        var actualHeight = screen_1["default"].height;
+        var heightFromWidth = screen_1["default"].width * this.aspectRatio.height / this.aspectRatio.width;
+        var widthFromHeight = screen_1["default"].height * this.aspectRatio.width / this.aspectRatio.height;
+        this._width = actualWidth;
+        this._height = actualHeight;
+        this._scalingFactor = 1;
+        if (heightFromWidth > actualHeight) {
+            this._scalingFactor = actualHeight / heightFromWidth;
+            this._height = heightFromWidth;
+        } else if (widthFromHeight > actualWidth) {
+            this._scalingFactor = actualWidth / widthFromHeight;
+            this._width = widthFromHeight;
+        }
+        ctx.scale(this._scalingFactor, this._scalingFactor);
+    };
     Camera.prototype.applyTranslation = function (ctx) {
         ctx.translate(-this.transform.position.x, -this.transform.position.y);
+    };
+    Camera.prototype.drawLetterbox = function (ctx) {
+        if (this._width > screen_1["default"].width) {
+            // Vertical letterboxes
+            var letterboxHeight = this._height / this._scalingFactor - screen_1["default"].height;
+            console.log("LETTERBOX HEIGHT: " + letterboxHeight);
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, screen_1["default"].width, letterboxHeight / 2);
+            ctx.fillRect(0, screen_1["default"].height - letterboxHeight / 2, screen_1["default"].width, letterboxHeight / 2);
+        } else if (this._height > screen_1["default"].height) {
+            // Horizontal letterboxes
+            var letterboxWidth = this._width / this._scalingFactor - screen_1["default"].width;
+            console.log("LETTERBOX WIDTH: " + letterboxWidth);
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, letterboxWidth / 2, screen_1["default"].height);
+            ctx.fillRect(screen_1["default"].width - letterboxWidth / 2, 0, letterboxWidth / 2, screen_1["default"].height);
+        }
     };
     Camera._main = new Camera();
     return Camera;
@@ -1093,8 +1134,6 @@ var __importDefault = this && this.__importDefault || function (mod) {
     return mod && mod.__esModule ? mod : { "default": mod };
 };
 exports.__esModule = true;
-var camera_1 = __importDefault(require("../../core/camera"));
-var vector3_1 = __importDefault(require("../../core/math/vector3"));
 var text_1 = __importDefault(require("../../core/text"));
 var TitleScene = /** @class */function () {
     function TitleScene() {
@@ -1105,32 +1144,24 @@ var TitleScene = /** @class */function () {
         this.minZoomLevel = 10;
         this.titleText = new text_1["default"]();
         this.titleText.text = 'Platformer';
-        this.titleText.fontSize = '12pt';
+        this.titleText.fontSize = '1pt';
     }
     TitleScene.prototype.name = function () {
         return 'Title Screen';
     };
     TitleScene.prototype.update = function (deltaTime) {
-        this.zoomLevel += this.zoomDirection * deltaTime / 1000;
-        this.theta += deltaTime / 1000;
-        if (this.zoomLevel >= this.maxZoomLevel) {
-            this.zoomDirection = -1;
-            this.zoomLevel = this.maxZoomLevel;
-        }
-        if (this.zoomLevel <= this.minZoomLevel) {
-            this.zoomDirection = 1;
-            this.zoomLevel = this.minZoomLevel;
-        }
-        camera_1["default"].main.zoom = this.zoomLevel;
-        camera_1["default"].main.transform.position = new vector3_1["default"](Math.cos(this.theta) * 10, Math.sin(this.theta) * 10, 0);
+        // TODO: Stuff
     };
     TitleScene.prototype.draw = function (ctx, deltaTime) {
+        ctx.fillStyle = 'green';
+        var w = 4 / 3 * 10;
+        ctx.fillRect(-100, -100, 200, 200);
         this.titleText.draw(ctx, deltaTime);
     };
     return TitleScene;
 }();
 exports["default"] = TitleScene;
-},{"../../core/camera":"core\\camera.ts","../../core/math/vector3":"core\\math\\vector3.ts","../../core/text":"core\\text.ts"}],"platformer\\resources\\images\\alic_face.png":[function(require,module,exports) {
+},{"../../core/text":"core\\text.ts"}],"platformer\\resources\\images\\alic_face.png":[function(require,module,exports) {
 module.exports = "/alic_face.30be9f79.png";
 },{}],"index.ts":[function(require,module,exports) {
 "use strict";
@@ -1186,7 +1217,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '58464' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53589' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
