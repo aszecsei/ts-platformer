@@ -834,14 +834,12 @@ var Camera = /** @class */function () {
         if (this._width > screen_1["default"].width) {
             // Vertical letterboxes
             var letterboxHeight = this._height / this._scalingFactor - screen_1["default"].height;
-            console.log("LETTERBOX HEIGHT: " + letterboxHeight);
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, screen_1["default"].width, letterboxHeight / 2);
             ctx.fillRect(0, screen_1["default"].height - letterboxHeight / 2, screen_1["default"].width, letterboxHeight / 2);
         } else if (this._height > screen_1["default"].height) {
             // Horizontal letterboxes
             var letterboxWidth = this._width / this._scalingFactor - screen_1["default"].width;
-            console.log("LETTERBOX WIDTH: " + letterboxWidth);
             ctx.fillStyle = 'black';
             ctx.fillRect(0, 0, letterboxWidth / 2, screen_1["default"].height);
             ctx.fillRect(screen_1["default"].width - letterboxWidth / 2, 0, letterboxWidth / 2, screen_1["default"].height);
@@ -1217,7 +1215,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '53589' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '55999' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
