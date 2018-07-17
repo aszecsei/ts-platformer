@@ -1,29 +1,54 @@
 import Transform from './transform'
 
-export class Sprite {
+
+export enum LoopType {
+  NONE,
+  REPEAT,
+  PINGPONG
+}
+export default class Sprite {
   public transform: Transform
 
   private _inverseFPS: number
   private _currentFrame: number
   private _elapsedTime: number
+  private _frameDirection: number = 1
 
   constructor(
     public sheet: HTMLImageElement,
     public width: number,
     public height: number,
     public numFrames: number = 1,
-    framesPerSecond: number = 12
+    framesPerSecond: number = 12,
+    public loopType: LoopType = LoopType.NONE
   ) {
     this._inverseFPS = 1000 / framesPerSecond
     this._currentFrame = 0
     this._elapsedTime = 0
+    this.transform = new Transform()
   }
 
   public update(deltaTime: number) {
     this._elapsedTime += deltaTime
     if (this._elapsedTime >= this._inverseFPS) {
-      this._currentFrame++
+      this._currentFrame += this._frameDirection
       this._elapsedTime -= this._inverseFPS
+    }
+    if (this._currentFrame >= this.numFrames) {
+      if (this.loopType === LoopType.NONE) {
+        this._currentFrame = this.numFrames - 1
+      }  else if (this.loopType === LoopType.REPEAT) {
+        this._currentFrame = 0
+      } else if (this.loopType === LoopType.PINGPONG) {
+        this._currentFrame = this.numFrames - 2
+        this._frameDirection *= -1
+      }
+    }
+    if (this._currentFrame < 0) {
+      this._currentFrame = 1
+      if (this.loopType === LoopType.PINGPONG) {
+        this._frameDirection *= -1
+      }
     }
   }
 
@@ -39,8 +64,8 @@ export class Sprite {
       0,
       this.width,
       this.height,
-      -this.width / 2,
-      -this.height / 2,
+      -this.width * this.transform.scale.x / 2,
+      -this.height * this.transform.scale.x / 2,
       this.width * this.transform.scale.x,
       this.height * this.transform.scale.y
     )

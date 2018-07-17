@@ -1,6 +1,9 @@
 import Camera from '../../core/camera'
+import Vector2 from '../../core/math/vector2'
 import Vector3 from '../../core/math/vector3'
+import { getImage } from '../../core/resource-manager'
 import { IScene } from '../../core/scene'
+import Sprite from '../../core/sprite'
 import Text from '../../core/text'
 
 export default class TitleScene implements IScene {
@@ -12,10 +15,15 @@ export default class TitleScene implements IScene {
   private maxZoomLevel = 13
   private minZoomLevel = 10
 
+  private alicSprite: Sprite
+
   constructor() {
     this.titleText = new Text()
     this.titleText.text = 'Platformer'
     this.titleText.fontSize = '1pt'
+
+    this.alicSprite = new Sprite(getImage('alic'), 1458, 1782)
+    this.alicSprite.transform.scale = new Vector2(0.01, 0.01)
   }
 
   public name() {
@@ -24,12 +32,13 @@ export default class TitleScene implements IScene {
 
   public update(deltaTime: number) {
     // TODO
+    this.alicSprite.update(deltaTime)
   }
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
     ctx.fillStyle = 'green'
-    const w = (4 / 3) * 10
     ctx.fillRect(-100, -100, 200, 200)
     this.titleText.draw(ctx, deltaTime)
+    this.alicSprite.draw(ctx)
   }
 }
