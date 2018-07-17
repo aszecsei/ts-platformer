@@ -93,13 +93,13 @@ export default class Camera {
   private drawLetterbox(ctx: CanvasRenderingContext2D) {
     if (this._width > Screen.width) {
       // Vertical letterboxes
-      const letterboxHeight = (this._height / this._scalingFactor) - Screen.height
+      const letterboxHeight = Screen.height - (this._height * this._scalingFactor)
       ctx.fillStyle = 'black'
       ctx.fillRect(0, 0, Screen.width, letterboxHeight / 2)
       ctx.fillRect(0, Screen.height - letterboxHeight / 2, Screen.width, letterboxHeight / 2)
     } else if (this._height > Screen.height) {
       // Horizontal letterboxes
-      const letterboxWidth = (this._width / this._scalingFactor) - Screen.width
+      const letterboxWidth = Screen.width - (this._width * this._scalingFactor)
       ctx.fillStyle = 'black'
       ctx.fillRect(0, 0, letterboxWidth / 2, Screen.height)
       ctx.fillRect(Screen.width - letterboxWidth / 2, 0, letterboxWidth / 2, Screen.height)
