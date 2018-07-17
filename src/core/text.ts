@@ -1,5 +1,6 @@
 import { IDrawable } from './rendering'
 import Screen from './screen'
+import Transform from './transform';
 
 export enum Alignment {
   Left,
@@ -31,6 +32,7 @@ export default class Text implements IDrawable {
   public fontWeight: 'normal' | 'bold' | 'bolder' | 'lighter'
   public lineSpacing?: string
   public text: string
+  public transform: Transform
 
   constructor() {
     this.alignment = Alignment.Left
@@ -44,6 +46,7 @@ export default class Text implements IDrawable {
     this.fontWeight = 'normal'
     this.lineSpacing = undefined
     this.text = ''
+    this.transform = new Transform()
   }
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number): void {
@@ -57,8 +60,7 @@ export default class Text implements IDrawable {
     // TODO: Positioning based on alignment, anchor, character size
     ctx.fillText(
       this.text,
-      (Screen.width - ctx.measureText(this.text).width) / 2,
-      Screen.height / 2 - 50
+      this.transform.position.x - (ctx.measureText(this.text).width / 2), this.transform.position.y + 2
     )
   }
 }

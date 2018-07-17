@@ -3,9 +3,9 @@ import { IScene, ISceneConstructor } from './scene'
 class Game {
   public currentScreen?: IScene
 
-  public SetUpScreen(ScreenType: ISceneConstructor) {
+  public SetUpScreen(sceneType: ISceneConstructor) {
     const mOldScreen = this.currentScreen
-    const newScreen = new ScreenType(mOldScreen)
+    const newScreen = new sceneType(mOldScreen)
     this.currentScreen = newScreen
   }
 }

@@ -1,4 +1,5 @@
 import * as config from '../config'
+import Camera from './camera'
 import { game } from './game'
 import { INPUT_MANAGER } from './input'
 import Screen from './screen'
@@ -36,7 +37,9 @@ export default function init() {
     ctx.clearRect(0, 0, Screen.width, Screen.height)
 
     game.currentScreen.update(inc)
+    Camera.main.begin(ctx)
     game.currentScreen.draw(ctx, inc)
+    Camera.main.end(ctx)
 
     if (config.DEBUG) {
       fpsList.push(inc)

@@ -215,9 +215,9 @@ export default class Vector3 {
     return dest
   }
 
-  private x: number
-  private y: number
-  private z: number
+  public x: number
+  public y: number
+  public z: number
 
   public get xy() {
     return [this.x, this.y]
