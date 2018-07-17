@@ -51,6 +51,7 @@ export default class Camera {
     this.applyScreenTranslation(ctx)
     this.applyScreenScale(ctx)
     this.applyScale(ctx)
+    this.applyRotation(ctx)
     this.applyTranslation(ctx)
   }
 
@@ -84,6 +85,10 @@ export default class Camera {
       this._width = widthFromHeight
     }
     ctx.scale(this._scalingFactor, this._scalingFactor)
+  }
+
+  private applyRotation(ctx: CanvasRenderingContext2D) {
+    ctx.rotate(-this.transform.rotation)
   }
 
   private applyTranslation(ctx: CanvasRenderingContext2D) {

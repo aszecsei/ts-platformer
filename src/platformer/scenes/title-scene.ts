@@ -23,7 +23,7 @@ export default class TitleScene implements IScene {
   }
 
   public update(deltaTime: number) {
-    // TODO: Stuff
+    // TODO
   }
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
