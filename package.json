@@ -1,0 +1,17 @@
+{
+  "name": "ts-platformer",
+  "version": "0.1.0",
+  "description": "A platformer game in TypeScript",
+  "main": "index.js",
+  "author": "Alic Szecsei",
+  "license": "MIT",
+  "scripts": {
+    "pretty": "prettier --write \"{src,__tests__}/**/*.{ts,css,json,md,html}\""
+  },
+  "devDependencies": {
+    "prettier": "^1.13.7",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.13.0",
+    "typescript": "^2.9.2"
+  }
+}
