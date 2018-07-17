@@ -1,10 +1,8 @@
 import Screen from './screen'
 import Transform from './transform'
 
-
-
 export interface IAspectRatio {
-  height: number,
+  height: number
   width: number
 }
 export default class Camera {
@@ -47,7 +45,7 @@ export default class Camera {
   }
 
   public begin(ctx: CanvasRenderingContext2D) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
     this.applyScreenTranslation(ctx)
     this.applyScreenScale(ctx)
     this.applyScale(ctx)
@@ -56,7 +54,7 @@ export default class Camera {
   }
 
   public end(ctx: CanvasRenderingContext2D) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.setTransform(1, 0, 0, 1, 0, 0)
     this.drawLetterbox(ctx)
   }
 
@@ -72,8 +70,10 @@ export default class Camera {
   private applyScreenScale(ctx: CanvasRenderingContext2D) {
     const actualWidth = Screen.width
     const actualHeight = Screen.height
-    const heightFromWidth = Screen.width * this.aspectRatio.height / this.aspectRatio.width
-    const widthFromHeight = Screen.height * this.aspectRatio.width / this.aspectRatio.height
+    const heightFromWidth =
+      (Screen.width * this.aspectRatio.height) / this.aspectRatio.width
+    const widthFromHeight =
+      (Screen.height * this.aspectRatio.width) / this.aspectRatio.height
     this._width = actualWidth
     this._height = actualHeight
     this._scalingFactor = 1
@@ -98,16 +98,26 @@ export default class Camera {
   private drawLetterbox(ctx: CanvasRenderingContext2D) {
     if (this._width > Screen.width) {
       // Vertical letterboxes
-      const letterboxHeight = Screen.height - (this._height * this._scalingFactor)
+      const letterboxHeight = Screen.height - this._height * this._scalingFactor
       ctx.fillStyle = 'black'
       ctx.fillRect(0, 0, Screen.width, letterboxHeight / 2)
-      ctx.fillRect(0, Screen.height - letterboxHeight / 2, Screen.width, letterboxHeight / 2)
+      ctx.fillRect(
+        0,
+        Screen.height - letterboxHeight / 2,
+        Screen.width,
+        letterboxHeight / 2
+      )
     } else if (this._height > Screen.height) {
       // Horizontal letterboxes
-      const letterboxWidth = Screen.width - (this._width * this._scalingFactor)
+      const letterboxWidth = Screen.width - this._width * this._scalingFactor
       ctx.fillStyle = 'black'
       ctx.fillRect(0, 0, letterboxWidth / 2, Screen.height)
-      ctx.fillRect(Screen.width - letterboxWidth / 2, 0, letterboxWidth / 2, Screen.height)
+      ctx.fillRect(
+        Screen.width - letterboxWidth / 2,
+        0,
+        letterboxWidth / 2,
+        Screen.height
+      )
     }
   }
 }

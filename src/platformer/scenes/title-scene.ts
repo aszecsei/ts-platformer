@@ -1,5 +1,5 @@
-import Camera from  '../../core/camera'
-import Vector3 from '../../core/math/vector3';
+import Camera from '../../core/camera'
+import Vector3 from '../../core/math/vector3'
 import { IScene } from '../../core/scene'
 import Text from '../../core/text'
 
@@ -28,7 +28,7 @@ export default class TitleScene implements IScene {
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
     ctx.fillStyle = 'green'
-    const w = (4/3) * 10
+    const w = (4 / 3) * 10
     ctx.fillRect(-100, -100, 200, 200)
     this.titleText.draw(ctx, deltaTime)
   }

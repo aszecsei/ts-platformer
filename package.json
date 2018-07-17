@@ -6,7 +6,7 @@
   "author": "Alic Szecsei",
   "license": "MIT",
   "scripts": {
-    "pretty": "prettier --write \"{src,__tests__}/**/*.{ts,css,json,md,html}\"",
+    "pretty": "prettier --write \"{src,__tests__}/**/*.{ts,css,json,md}\"",
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html",
     "watch": "parcel watch src/index.html"

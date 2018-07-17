@@ -1,6 +1,6 @@
 import { IDrawable } from './rendering'
 import Screen from './screen'
-import Transform from './transform';
+import Transform from './transform'
 
 export enum Alignment {
   Left,
@@ -60,7 +60,8 @@ export default class Text implements IDrawable {
     // TODO: Positioning based on alignment, anchor, character size
     ctx.fillText(
       this.text,
-      this.transform.position.x - (ctx.measureText(this.text).width / 2), this.transform.position.y + 2
+      this.transform.position.x - ctx.measureText(this.text).width / 2,
+      this.transform.position.y + 2
     )
   }
 }
