@@ -1,10 +1,10 @@
 import Transform from './transform'
-
+import Vector2 from './math/vector2'
 
 export enum LoopType {
   NONE,
   REPEAT,
-  PINGPONG
+  PINGPONG,
 }
 export default class Sprite {
   public transform: Transform
@@ -18,6 +18,7 @@ export default class Sprite {
     public sheet: HTMLImageElement,
     public width: number,
     public height: number,
+    public anchor: Vector2 = Vector2.zero,
     public numFrames: number = 1,
     framesPerSecond: number = 12,
     public loopType: LoopType = LoopType.NONE
@@ -37,7 +38,7 @@ export default class Sprite {
     if (this._currentFrame >= this.numFrames) {
       if (this.loopType === LoopType.NONE) {
         this._currentFrame = this.numFrames - 1
-      }  else if (this.loopType === LoopType.REPEAT) {
+      } else if (this.loopType === LoopType.REPEAT) {
         this._currentFrame = 0
       } else if (this.loopType === LoopType.PINGPONG) {
         this._currentFrame = this.numFrames - 2
@@ -64,8 +65,8 @@ export default class Sprite {
       0,
       this.width,
       this.height,
-      -this.width * this.transform.scale.x / 2,
-      -this.height * this.transform.scale.x / 2,
+      -this.anchor.x * this.transform.scale.x,
+      -this.anchor.y * this.transform.scale.y,
       this.width * this.transform.scale.x,
       this.height * this.transform.scale.y
     )
