@@ -1,3 +1,4 @@
+import Vector2 from './math/vector2'
 import Screen from './screen'
 import Transform from './transform'
 
@@ -58,6 +59,29 @@ export default class Camera {
     this.drawLetterbox(ctx)
   }
 
+  public ScreenToWorld(vector2: Vector2) {
+    const screenTranslation = Vector2.Difference(
+      vector2,
+      new Vector2(Screen.width / 2, Screen.height / 2)
+    )
+    const screenScale = Vector2.Quotient(
+      screenTranslation,
+      new Vector2(this._scalingFactor, this._scalingFactor)
+    )
+    const zoomLevel = this._height / (2 * this.orthographicSize)
+    const scale = Vector2.Quotient(
+      screenScale,
+      new Vector2(zoomLevel, zoomLevel)
+    )
+    const rotation = Vector2.Rotate(scale, this.transform.rotation)
+    const translation = Vector2.Sum(
+      rotation,
+      new Vector2(this.transform.position.x, -this.transform.position.y)
+    )
+    const flippedY = Vector2.Product(translation, new Vector2(1, -1))
+    return flippedY
+  }
+
   private applyScale(ctx: CanvasRenderingContext2D) {
     const zoomLevel = this._height / (2 * this.orthographicSize)
     ctx.scale(zoomLevel, zoomLevel)
@@ -92,7 +116,7 @@ export default class Camera {
   }
 
   private applyTranslation(ctx: CanvasRenderingContext2D) {
-    ctx.translate(-this.transform.position.x, -this.transform.position.y)
+    ctx.translate(-this.transform.position.x, this.transform.position.y)
   }
 
   private drawLetterbox(ctx: CanvasRenderingContext2D) {

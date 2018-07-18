@@ -109,6 +109,17 @@ export default class Vector2 {
     throw new Error('Not implemented')
   }
 
+  public static Rotate(v: Vector2, theta: number, dest?: Vector2) {
+    if (!dest) {
+      dest = new Vector2()
+    }
+    const vx = v.x
+    const vy = v.y
+    dest.x = vx * Math.cos(theta) - vy * Math.sin(theta)
+    dest.y = vx * Math.sin(theta) + vy * Math.cos(theta)
+    return dest
+  }
+
   public static SignedAngle(from: Vector2, to: Vector2) {
     // TODO
     throw new Error('Not implemented')

@@ -5,6 +5,7 @@ import { getImage } from '../../core/resource-manager'
 import { IScene } from '../../core/scene'
 import Sprite from '../../core/sprite'
 import Text from '../../core/text'
+import { INPUT_MANAGER, MouseButton } from './../../core/input'
 
 export default class TitleScene implements IScene {
   private titleText: Text
@@ -15,15 +16,18 @@ export default class TitleScene implements IScene {
   private maxZoomLevel = 13
   private minZoomLevel = 10
 
-  private alicSprite: Sprite
+  private cursor: Sprite
 
   constructor() {
     this.titleText = new Text()
     this.titleText.text = 'Platformer'
     this.titleText.fontSize = '1pt'
 
-    this.alicSprite = new Sprite(getImage('alic'), 1458, 1782)
-    this.alicSprite.transform.scale = new Vector2(0.01, 0.01)
+    this.cursor = new Sprite(getImage('cursor'), 768, 768)
+    this.cursor.transform.scale = new Vector2(0.0005, 0.0005)
+
+    Camera.main.orthographicSize = 10
+    Camera.main.transform.position = new Vector3(4, 5, 0)
   }
 
   public name() {
@@ -32,13 +36,26 @@ export default class TitleScene implements IScene {
 
   public update(deltaTime: number) {
     // TODO
-    this.alicSprite.update(deltaTime)
+    const mp = INPUT_MANAGER.mousePosition
+
+    if (INPUT_MANAGER.isMouseButtonDown(MouseButton.LEFT)) {
+      Camera.main.transform.rotation -= deltaTime / 1000
+    }
+    if (INPUT_MANAGER.isMouseButtonDown(MouseButton.RIGHT)) {
+      Camera.main.transform.rotation += deltaTime / 1000
+    }
+
+    const v2 = Camera.main.ScreenToWorld(new Vector2(mp.x, mp.y))
+    this.cursor.transform.position.xy = v2.xy
+    this.cursor.transform.rotation = Camera.main.transform.rotation
+
+    this.cursor.update(deltaTime)
   }
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
     ctx.fillStyle = 'green'
     ctx.fillRect(-100, -100, 200, 200)
     this.titleText.draw(ctx, deltaTime)
-    this.alicSprite.draw(ctx)
+    this.cursor.draw(ctx)
   }
 }

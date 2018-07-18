@@ -4,10 +4,10 @@ import * as ResourceManager from './core/resource-manager'
 import TitleScene from './platformer/scenes/title-scene'
 /// <reference path="./@types/images.d.ts" />
 
-import alicURL from './platformer/resources/images/alic_face.png'
+import cursorImage from './platformer/resources/images/arrow-cursor.png'
 
 // Load all resources
-ResourceManager.loadImage('alic', alicURL as string)
+ResourceManager.loadImage('cursor', cursorImage)
 
 init()
 game.SetUpScreen(TitleScene)

@@ -2,6 +2,7 @@ import * as config from '../config'
 import Camera from './camera'
 import { game } from './game'
 import { INPUT_MANAGER, MouseButton } from './input'
+import Vector2 from './math/vector2'
 import Screen from './screen'
 
 export default function init() {
@@ -15,7 +16,7 @@ export default function init() {
 
   resizeCanvas()
 
-  ctx.imageSmoothingEnabled = false
+  ctx.imageSmoothingEnabled = true
   ctx.textBaseline = 'middle'
 
   let last = -1
@@ -64,12 +65,13 @@ export default function init() {
         50,
         100
       )
+      const mp = INPUT_MANAGER.mousePosition
+      ctx.fillText(`Mouse Pos (Screen): ${mp.x}, ${mp.y}`, 50, 150)
+      const worldPos = Camera.main.ScreenToWorld(new Vector2(mp.x, mp.y))
       ctx.fillText(
-        `Mouse Pos: ${INPUT_MANAGER.mousePosition.x}, ${
-          INPUT_MANAGER.mousePosition.y
-        }`,
+        `Mouse Pos (World): ${worldPos.x.toFixed(3)}, ${worldPos.y.toFixed(3)}`,
         50,
-        150
+        175
       )
       const mbStr = `${
         INPUT_MANAGER.isMouseButtonDown(MouseButton.LEFT) ? 'LEFT ' : ''
