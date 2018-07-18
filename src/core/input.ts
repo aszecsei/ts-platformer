@@ -1,3 +1,5 @@
+import Vector2 from './math/vector2'
+
 export enum Key {
   BACKSPACE = 8,
   TAB = 9,
@@ -100,24 +102,61 @@ export enum Key {
   SINGLE_QUOTE = 222,
 }
 
+export enum MouseButton {
+  LEFT = 0,
+  MIDDLE = 1,
+  RIGHT = 2,
+}
+
 class CInputManager {
   private _pressed = new Set<Key>()
   private _lastPressed = new Set<Key>()
 
+  private _mouseButtonsDown = new Set<MouseButton>()
+  private _lastMousebuttonsDown = new Set<MouseButton>()
+
+  private _mousePosition = { x: 0, y: 0 }
+
+  public get mousePosition() {
+    return this._mousePosition
+  }
+
   public isDown(keyCode: Key) {
     return this._pressed.has(keyCode)
+  }
+
+  public isMouseButtonDown(mouseButton: MouseButton) {
+    return this._mouseButtonsDown.has(mouseButton)
   }
 
   public pressed(keyCode: Key) {
     return this._pressed.has(keyCode) && !this._lastPressed.has(keyCode)
   }
 
+  public mouseButtonPressed(mouseButton: MouseButton) {
+    return (
+      this._mouseButtonsDown.has(mouseButton) &&
+      !this._lastMousebuttonsDown.has(mouseButton)
+    )
+  }
+
   public isUp(keyCode: Key) {
     return !this._pressed.has(keyCode)
   }
 
+  public isMouseButtonUp(mouseButton: MouseButton) {
+    return !this._mouseButtonsDown.has(mouseButton)
+  }
+
   public released(keyCode: Key) {
     return !this._pressed.has(keyCode) && this._lastPressed.has(keyCode)
+  }
+
+  public mouseButtonReleased(mouseButton: MouseButton) {
+    return (
+      !this._mouseButtonsDown.has(mouseButton) &&
+      this._lastMousebuttonsDown.has(mouseButton)
+    )
   }
 
   public onKeydown(event: KeyboardEvent) {
@@ -130,9 +169,26 @@ class CInputManager {
     event.preventDefault()
   }
 
+  public onMousedown(event: MouseEvent) {
+    this._mouseButtonsDown.add(event.button)
+    event.preventDefault()
+  }
+
+  public onMouseup(event: MouseEvent) {
+    this._mouseButtonsDown.delete(event.button)
+    event.preventDefault()
+  }
+
+  public onMouseMove(event: MouseEvent) {
+    this._mousePosition.x = event.clientX - document.documentElement.clientLeft
+    this._mousePosition.y = event.clientY - document.documentElement.clientTop
+  }
+
   public flush() {
     this._lastPressed.clear()
+    this._lastMousebuttonsDown.clear()
     this._pressed.forEach(k => this._lastPressed.add(k))
+    this._mouseButtonsDown.forEach(k => this._lastMousebuttonsDown.add(k))
   }
 }
 
