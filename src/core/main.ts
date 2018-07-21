@@ -3,6 +3,7 @@ import Camera from './camera'
 import { game } from './game'
 import { INPUT_MANAGER, MouseButton } from './input'
 import Vector2 from './math/vector2'
+import * as ResourceManager from './resource-manager'
 import Screen from './screen'
 
 export default function init() {
@@ -79,6 +80,14 @@ export default function init() {
         INPUT_MANAGER.isMouseButtonDown(MouseButton.RIGHT) ? 'RIGHT ' : ''
       }`
       ctx.fillText(`Mouse Buttons: ${mbStr}`, 50, 200)
+    }
+
+    if (config.cursor) {
+      ctx.drawImage(
+        ResourceManager.getImage(config.cursor),
+        INPUT_MANAGER.mousePosition.x,
+        INPUT_MANAGER.mousePosition.y
+      )
     }
 
     INPUT_MANAGER.flush()

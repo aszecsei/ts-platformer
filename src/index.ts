@@ -7,7 +7,7 @@ import TitleScene from './platformer/scenes/title-scene'
 import cursorImage from './platformer/resources/images/arrow-cursor.png'
 
 // Load all resources
-ResourceManager.loadImage('cursor', cursorImage)
+ResourceManager.loadImage('cursor-arrow', cursorImage)
 
 init()
 game.SetUpScreen(TitleScene)

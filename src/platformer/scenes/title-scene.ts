@@ -16,15 +16,10 @@ export default class TitleScene implements IScene {
   private maxZoomLevel = 13
   private minZoomLevel = 10
 
-  private cursor: Sprite
-
   constructor() {
     this.titleText = new Text()
     this.titleText.text = 'Platformer'
     this.titleText.fontSize = '1pt'
-
-    this.cursor = new Sprite(getImage('cursor'), 768, 768)
-    this.cursor.transform.scale = new Vector2(0.0005, 0.0005)
 
     Camera.main.orthographicSize = 10
     Camera.main.transform.position = new Vector3(4, 5, 0)
@@ -46,16 +41,11 @@ export default class TitleScene implements IScene {
     }
 
     const v2 = Camera.main.ScreenToWorld(new Vector2(mp.x, mp.y))
-    this.cursor.transform.position.xy = v2.xy
-    this.cursor.transform.rotation = Camera.main.transform.rotation
-
-    this.cursor.update(deltaTime)
   }
 
   public draw(ctx: CanvasRenderingContext2D, deltaTime: number) {
     ctx.fillStyle = 'green'
     ctx.fillRect(-100, -100, 200, 200)
     this.titleText.draw(ctx, deltaTime)
-    this.cursor.draw(ctx)
   }
 }
